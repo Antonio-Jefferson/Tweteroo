@@ -12,18 +12,20 @@ server.post("/sign-up", (req, res) => {
     const { username, avatar } = req.body;
     const isEmpty = !username || !avatar
     const isString = typeof username !== "string" || typeof avatar !== "string"
-
-    if (isEmpty || isString) {
-        return res.status(400).json("Todos os campos são obrigatórios!")
-    }
-
     const existUser = users.find((user) => user.username === username);
+
     if (existUser) {
         return res.status(400).json("Usuário já existente!");
+    } else {
+        if (isEmpty || isString) {
+            return res.status(400).json("Todos os campos são obrigatórios!")
+        } else {
+            res.status(200).send("OK")
+            const newUser = { username, avatar };
+            users.push(newUser)
+        }
     }
-    const newUser = { username, avatar };
-    users.push(newUser)
-    res.status(2000).send("OK")
+
 })
 
 server.post("/tweets", (req, res) => {
@@ -33,16 +35,17 @@ server.post("/tweets", (req, res) => {
 
     if (!users.find(user => user.username === username)) {
         return res.status(400).send('UNAUTHORIZED');
-    }
+    } else {
+        if (isEmpty || isString) {
+            return res.status(400).json("Todos os campos são obrigatórios!")
+        } else {
 
-    if (isEmpty || isString) {
-        return res.status(400).json("Todos os campos são obrigatórios!")
+            const { avatar } = users.find((user) => user.username === username)
+            const newTweet = { username, tweet, avatar };
+            tweetsUser.push(newTweet);
+            res.status(200).send("OK")
+        }
     }
-
-    const { avatar } = users.find((user) => user.username === username)
-    const newTweet = { username, tweet, avatar };
-    tweetsUser.push(newTweet);
-    res.status(200).send("OK")
 })
 
 server.get("/tweets", (req, res) => {
