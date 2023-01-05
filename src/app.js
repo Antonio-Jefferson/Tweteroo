@@ -10,6 +10,17 @@ const tweetsUser = [];
 
 server.post("/sign-up", (req, res) => {
     const { username, avatar } = req.body;
+    const isEmpty = !username || !avatar
+    const isString = typeof username !== "string" || typeof avatar !== "string"
+
+    if (isEmpty || isString) {
+        return res.status(400).json("Todos os campos são obrigatórios!")
+    }
+
+    const existUser = users.find((user) => user.username === username);
+    if (existUser) {
+        return res.status(400).json("Usuário já existente!");
+    }
     const newUser = { username, avatar };
     users.push(newUser)
     res.send("OK")
@@ -17,9 +28,17 @@ server.post("/sign-up", (req, res) => {
 
 server.post("/tweets", (req, res) => {
     const { username, tweet } = req.body;
+    const isEmpty = !username || !avatar
+    const isString = typeof username !== "string" || typeof avatar !== "string"
+
+    if (isEmpty || isString) {
+        return res.status(400).json("Todos os campos são obrigatórios!")
+    }
+
     if (!users.find(user => user.username === username)) {
         return res.status(400).send('UNAUTHORIZED');
     }
+
     const { avatar } = users.find((user) => user.username === username)
     const newTweet = { username, tweet, avatar };
     tweetsUser.push(newTweet);
@@ -27,13 +46,13 @@ server.post("/tweets", (req, res) => {
 })
 
 server.get("/tweets", (req, res) => {
-    if(tweetsUser.length === 0){
-        return res.send("")
+    if (tweetsUser.length === 0) {
+        return res.send(tweetsUser)
     }
-    if(tweetsUser.length > 10 ){
-        let lastTweets = tweetsUser[tweetsUser.length - 10];
+    if (tweetsUser.length > 10) {
+        let lastTweets = tweetsUser.slice(-10);
         return res.status(200).send(lastTweets)
-    }else{
+    } else {
         return res.status(200).send(tweetsUser)
     }
 })
