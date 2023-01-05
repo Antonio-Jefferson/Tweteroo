@@ -1,20 +1,19 @@
 import express from "express"
+import cors from "cors"
 
 const server = express()
+server.use(cors())
+server.use(express.json())
 
+const users = [];
+const tweetsUser = [];
 
+server.post("/sign-up", (req, res) => {
+    const { username, avatar} = req.body;
+    const newUser = {username, avatar};
+    users.push(newUser)
+    res.send("OK")
+})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-server.listen(5000, ()=> console.log(`Server rodando na porta 5000 `))
+const PORT = 5000;
+server.listen(PORT, () => console.log(`Server rodando na porta ${PORT} `))
