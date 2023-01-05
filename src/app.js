@@ -23,26 +23,26 @@ server.post("/sign-up", (req, res) => {
     }
     const newUser = { username, avatar };
     users.push(newUser)
-    res.send("OK")
+    res.status(2001).send("OK")
 })
 
 server.post("/tweets", (req, res) => {
     const { username, tweet } = req.body;
-    const isEmpty = !username || !avatar
-    const isString = typeof username !== "string" || typeof avatar !== "string"
-
-    if (isEmpty || isString) {
-        return res.status(400).json("Todos os campos são obrigatórios!")
-    }
+    const isEmpty = !username || !tweet
+    const isString = typeof username !== "string" || typeof tweet !== "string"
 
     if (!users.find(user => user.username === username)) {
         return res.status(400).send('UNAUTHORIZED');
     }
 
+    if (isEmpty || isString) {
+        return res.status(400).json("Todos os campos são obrigatórios!")
+    }
+
     const { avatar } = users.find((user) => user.username === username)
     const newTweet = { username, tweet, avatar };
     tweetsUser.push(newTweet);
-    res.send("OK")
+    res.status(201).send("OK")
 })
 
 server.get("/tweets", (req, res) => {
