@@ -23,7 +23,7 @@ server.post("/sign-up", (req, res) => {
     }
     const newUser = { username, avatar };
     users.push(newUser)
-    res.status(2001).send("OK")
+    res.status(2000).send("OK")
 })
 
 server.post("/tweets", (req, res) => {
@@ -42,7 +42,7 @@ server.post("/tweets", (req, res) => {
     const { avatar } = users.find((user) => user.username === username)
     const newTweet = { username, tweet, avatar };
     tweetsUser.push(newTweet);
-    res.status(201).send("OK")
+    res.status(200).send("OK")
 })
 
 server.get("/tweets", (req, res) => {
