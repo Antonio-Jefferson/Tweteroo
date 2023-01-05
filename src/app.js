@@ -15,5 +15,16 @@ server.post("/sign-up", (req, res) => {
     res.send("OK")
 })
 
+server.post("/tweets", (req, res)=>{
+    const {username, tweet } = req.body;
+    if (!users.find(user => user.username === username)) {
+        return res.status(400).send('UNAUTHORIZED');
+    }
+    const newTweet = {username, tweet};
+    tweetsUser.push(newTweet);
+    res.send("OK")
+})
+
+
 const PORT = 5000;
 server.listen(PORT, () => console.log(`Server rodando na porta ${PORT} `))
