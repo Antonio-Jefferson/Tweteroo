@@ -27,8 +27,15 @@ server.post("/tweets", (req, res) => {
 })
 
 server.get("/tweets", (req, res) => {
-    let lastTweets = tweetsUser[tweetsUser.length - 10];
-    res.status(200).send(lastTweets)
+    if(tweetsUser.length === 0){
+        return res.send("")
+    }
+    if(tweetsUser.length > 10 ){
+        let lastTweets = tweetsUser[tweetsUser.length - 10];
+        return res.status(200).send(lastTweets)
+    }else{
+        return res.status(200).send(tweetsUser)
+    }
 })
 
 const PORT = 5000;
