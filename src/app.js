@@ -1,12 +1,12 @@
 import express from "express"
 import cors from "cors"
 
-const server = express()
-server.use(cors())
-server.use(express.json())
-
+const server = express();
+const PORT = 5000;
 const users = [];
 const tweetsUsers = [];
+server.use(cors());
+server.use(express.json());
 
 server.post("/sign-up", (req, res) => {
     const { username, avatar } = req.body;
@@ -60,11 +60,10 @@ server.get("/tweets", (req, res) => {
     }
 })
 
-server.get("/tweets/:username", (req, res)=>{
-    const {username} = req.params
-    const allTweetsUser = tweetsUsers.filter((tweets)=> tweets.username === username)
+server.get("/tweets/:USERNAME", (req, res)=>{
+    const {USERNAME} = req.params
+    const allTweetsUser = tweetsUsers.filter((tweets)=> tweets.username === USERNAME)
     res.status(200).send(allTweetsUser)
 })
 
-const PORT = 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`))
