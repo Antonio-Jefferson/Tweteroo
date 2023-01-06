@@ -6,7 +6,7 @@ server.use(cors())
 server.use(express.json())
 
 const users = [];
-const tweetsUser = [];
+const tweetsUsers = [];
 
 server.post("/sign-up", (req, res) => {
     const { username, avatar } = req.body;
@@ -20,7 +20,7 @@ server.post("/sign-up", (req, res) => {
         if (isEmpty || isString) {
             return res.status(400).json("Todos os campos são obrigatórios!")
         } else {
-            res.status(200).send("OK")
+            res.status(201).send("OK")
             const newUser = { username, avatar };
             users.push(newUser)
         }
@@ -42,22 +42,28 @@ server.post("/tweets", (req, res) => {
 
             const { avatar } = users.find((user) => user.username === username)
             const newTweet = { username, tweet, avatar };
-            tweetsUser.push(newTweet);
-            res.status(200).send("OK")
+            tweetsUsers.push(newTweet);
+            res.status(201).send("OK")
         }
     }
 })
 
 server.get("/tweets", (req, res) => {
-    if (tweetsUser.length === 0) {
-        return res.send(tweetsUser)
+    if (tweetsUsers.length === 0) {
+        return res.send(tweetsUsers)
     }
-    if (tweetsUser.length > 10) {
-        let lastTweets = tweetsUser.slice(-10);
+    if (tweetsUsers.length > 10) {
+        let lastTweets = tweetsUsers.slice(-10);
         return res.status(200).send(lastTweets)
     } else {
-        return res.status(200).send(tweetsUser)
+        return res.status(200).send(tweetsUsers)
     }
+})
+
+server.get("/tweets/:username", (req, res)=>{
+    const {username} = req.params
+    const allTweetsUser = tweetsUsers.filter((tweets)=> tweets.username === username)
+    res.status(200).send(allTweetsUser)
 })
 
 const PORT = 5000;
